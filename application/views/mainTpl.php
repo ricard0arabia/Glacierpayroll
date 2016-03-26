@@ -384,8 +384,13 @@
     <script src='<?php echo base_url()?>css/blueprint/jquery-fullcalendar-crud-master/js/bootstrap-colorpicker.min.js'></script>
 
     <script src='<?php echo base_url()?>css/blueprint/jquery-fullcalendar-crud-master/js/bootstrap-timepicker.min.js'></script>
+    <?php $session = $_SESSION['userLevel']; ?>
+    <script type = "text/javascript">
+    
+     var session = "<?= $session ?>";
 
-    <script src='<?php echo base_url()?>css/blueprint/jquery-fullcalendar-crud-master/js/main.js'></script>
+    </script>
+    <script type = "text/javascript"src='<?php echo base_url()?>css/blueprint/jquery-fullcalendar-crud-master/js/main.js'></script>
 
        <script type='text/javascript' src="<?php echo base_url(); ?>css/blueprint/materialize/js/materialize.min.js"></script>
 

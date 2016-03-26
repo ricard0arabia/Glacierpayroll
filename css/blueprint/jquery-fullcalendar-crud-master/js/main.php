@@ -1,5 +1,6 @@
+<script>
 $(function(){
-    if(session == "1"){
+
     var currentDate; // Holds the day clicked when adding a new event
     var currentEvent; // Holds the event object when editing an event
 
@@ -11,7 +12,7 @@ $(function(){
         showMeridian: false
     });  // Timepicker
 
-    var base_url='http://localhost:8080/fullcalendar/'; // Here i define the base_url
+    var base_url='http://localhost:8080/payroll/'; // Here i define the base_url
 
     // Fullcalendar
     $('#calendar').fullCalendar({
@@ -26,7 +27,7 @@ $(function(){
         eventLimit: true, // allow "more" link when too many events
         events: base_url+'calendar/getEvents',
 
-        
+<?php if($_SESSION['userLevel'] == 1) { ?>
         // Handle Day Click
         dayClick: function(date, event, view) {
             currentDate = date.format();
@@ -43,6 +44,7 @@ $(function(){
                 title: 'Add Event (' + date.format("MMM DD, YYYY") + ')' // Modal title
             });
         },
+    <?php } ?>
    
           editable: true, // Make the event draggable true 
          eventDrop: function(event, delta, revertFunc) {  
@@ -139,7 +141,7 @@ $(function(){
         //Show Modal
         $('.modal').modal('show');
     }
-
+<?php if($_SESSION['userLevel'] == 1) { ?>
     // Handle Click on Add Button
     $('.modal').on('click', '#add-event',  function(e){
         if(validator(['title', 'description'])) {
@@ -154,7 +156,7 @@ $(function(){
             });
         }
     });
-
+<?php } ?>
 
     // Handle click on Update Button
     $('.modal').on('click', '#update-event',  function(e){
@@ -201,125 +203,5 @@ $(function(){
         }
         return true;
     }
-}
-
-// **********************************************************************************************************
-else{
-
-   var currentDate; // Holds the day clicked when adding a new event
-    var currentEvent; // Holds the event object when editing an event
-
-    $('#color').colorpicker(); // Colopicker
-    $('#time').timepicker({
-        minuteStep: 5,
-        showInputs: false,
-        disableFocus: true,
-        showMeridian: false
-    });  // Timepicker
-
-    var base_url='http://localhost:8080/fullcalendar/'; // Here i define the base_url
-
-    // Fullcalendar
-    $('#calendar').fullCalendar({
-        timeFormat: 'H(:mm)',
-        header: {
-            left: 'prev, next, today',
-            center: 'title',
-             right: 'month, basicWeek, basicDay'
-        },
-        // Get all events stored in database
-
-        eventLimit: true, // allow "more" link when too many events
-        events: base_url+'calendar/getEvents',
-
-        
-        // Handle Day Click
-       
-        // Event Mouseover
-        eventMouseover: function(calEvent, jsEvent, view){
-
-            var tooltip = '<div class="event-tooltip">' + calEvent.description + '</div>';
-            $("body").append(tooltip);
-
-            $(this).mouseover(function(e) {
-                $(this).css('z-index', 10000);
-                $('.event-tooltip').fadeIn('500');
-                $('.event-tooltip').fadeTo('10', 1.9);
-            }).mousemove(function(e) {
-                $('.event-tooltip').css('top', e.pageY + 10);
-                $('.event-tooltip').css('left', e.pageX + 20);
-            });
-        },
-        eventMouseout: function(calEvent, jsEvent) {
-            $(this).css('z-index', 8);
-            $('.event-tooltip').remove();
-        },
-        // Handle Existing Event Click
-        eventClick: function(calEvent, jsEvent, view) {
-            // Set currentEvent variable according to the event clicked in the calendar
-            currentEvent = calEvent;
-
-            // Open modal to edit or delete event
-            modal({
-                // Available buttons when editing
-                buttons: {
-                    
-                },
-                title: 'Event Details of "' + calEvent.title + '"',
-                event: calEvent
-            });
-        }
-
-    });
-
-    // Prepares the modal window according to data passed
-    function modal(data) {
-        // Set modal title
-        $('.modal-title').html(data.title);
-        // Clear buttons except Cancel
-        $('.modal-footer button:not(".btn-default")').remove();
-        // Set input values
-        $('#title').val(data.event ? data.event.title : '');
-        document.getElementById('title').readOnly = true;
-        if( ! data.event) {
-            // When adding set timepicker to current time
-            var now = new Date();
-            var time = now.getHours() + ':' + (now.getMinutes() < 10 ? '0' + now.getMinutes() : now.getMinutes());
-        } else {
-            // When editing set timepicker to event's time
-            var time = data.event.date.split(' ')[1].slice(0, -3);
-            time = time.charAt(0) === '0' ? time.slice(1) : time;
-        }
-        $('#time').val(time);
-        document.getElementById('time').readOnly = true;
-        $('#description').val(data.event ? data.event.description : '');
-        document.getElementById('description').readOnly = true;
-        // Create Butttons
-        $.each(data.buttons, function(index, button){
-            $('.modal-footer').prepend('<button type="button" id="' + button.id  + '" class="btn ' + button.css + '">' + button.label + '</button>')
-        })
-        //Show Modal
-        $('.modal').modal('show');
-    }
-
-
-    // Get Formated Time From Timepicker
-    function getTime() {
-        var time = $('#time').val();
-        return (time.indexOf(':') == 1 ? '0' + time : time) + ':00';
-    }
-
-    // Dead Basic Validation For Inputs
-    function validator(elements) {
-        var errors = 0;
-        $.each(elements, function(index, element){
-            if($.trim($('#' + element).val()) == '') errors++;
-        });
-        if(errors) {
-            $('.error').html('Please insert title and description');
-            return false;
-        }
-        return true;
-    }
-}
 });
+</script>

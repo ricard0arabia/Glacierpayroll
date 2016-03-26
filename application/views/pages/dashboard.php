@@ -24,13 +24,16 @@
 
 
                     <div class="modal fade">
-                        <div class="modal-dialog">
+                       
                             <div class="modal-content">
                                 <div class="modal-header">
+                                    <?php if($_SESSION['userLevel'] == 1) { ?>
                                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                      <?php } ?>
                                     <h4 class="modal-title"></h4>
+                                  
                                 </div>
-                                <div class="modal-body">
+                              
                                     <div class="error"></div>
                                     <form class="form-horizontal" id="crud-form">
                                         <div class="form-group">
@@ -51,6 +54,7 @@
                                                 <textarea class="form-control" id="description" name="description"></textarea>
                                             </div>
                                         </div>
+                                        <?php if($_SESSION['userLevel'] == 1) { ?>
                                         <div class="form-group">
                                             <label class="col-md-4 control-label" for="color">Color</label>
                                             <div class="col-md-4">
@@ -58,13 +62,19 @@
                                                 <span class="help-block">Click to pick a color</span>
                                             </div>
                                         </div>
+                                        <?php } ?>
                                     </form>
-                                </div>
+                             
                                 <div class="modal-footer">
+                                     <?php if($_SESSION['userLevel'] == 1) { ?>
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                     <?php }else{ ?>
+                                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                     <?php } ?>
+
                                 </div>
                             </div>
-                        </div>
+                
                     </div>
             </div>
             <!-- /.row -->
