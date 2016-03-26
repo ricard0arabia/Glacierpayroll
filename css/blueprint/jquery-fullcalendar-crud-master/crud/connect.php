@@ -1,6 +1,6 @@
 <?php
 	try {
-	  $dbh = new PDO("mysql:host=mysql4.000webhost.com;dbname=a9287828_glacier", 'a9287828_glacier', '123456abc');
+	  $dbh = new PDO("mysql:host=localhost:8080;dbname=calendar", 'root', '');
 	}
 	catch(PDOException $e) {
 	    echo $e->getMessage();

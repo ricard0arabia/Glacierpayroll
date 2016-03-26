@@ -1,6 +1,8 @@
 $(function(){
+
     var currentDate; // Holds the day clicked when adding a new event
     var currentEvent; // Holds the event object when editing an event
+
     $('#color').colorpicker(); // Colopicker
     $('#time').timepicker({
         minuteStep: 5,
@@ -8,16 +10,22 @@ $(function(){
         disableFocus: true,
         showMeridian: false
     });  // Timepicker
+
+    var base_url='http://localhost:8080/fullcalendar/'; // Here i define the base_url
+
     // Fullcalendar
     $('#calendar').fullCalendar({
         timeFormat: 'H(:mm)',
         header: {
             left: 'prev, next, today',
             center: 'title',
-            right: 'month, basicWeek, basicDay'
+             right: 'month, basicWeek, basicDay'
         },
         // Get all events stored in database
-        events: 'crud/getEvents.php',
+
+        eventLimit: true, // allow "more" link when too many events
+        events: base_url+'calendar/getEvents',
+
         // Handle Day Click
         dayClick: function(date, event, view) {
             currentDate = date.format();
@@ -34,18 +42,43 @@ $(function(){
                 title: 'Add Event (' + date.format() + ')' // Modal title
             });
         },
+   
+          editable: true, // Make the event draggable true 
+         eventDrop: function(event, delta, revertFunc) {  
+
+            
+               $.post(base_url+'calendar/dragUpdateEvent',{                            
+                id:event.id,
+                date: event.start.format()
+            }, function(result){
+                if(result)
+                {
+                alert('Updated');
+                }
+                else
+                {
+                    alert('Try Again later!')
+                }
+
+            });
+
+
+
+          },
         // Event Mouseover
         eventMouseover: function(calEvent, jsEvent, view){
+
             var tooltip = '<div class="event-tooltip">' + calEvent.description + '</div>';
             $("body").append(tooltip);
+
             $(this).mouseover(function(e) {
                 $(this).css('z-index', 10000);
                 $('.event-tooltip').fadeIn('500');
                 $('.event-tooltip').fadeTo('10', 1.9);
             }).mousemove(function(e) {
-                    $('.event-tooltip').css('top', e.pageY + 10);
-                    $('.event-tooltip').css('left', e.pageX + 20);
-                });
+                $('.event-tooltip').css('top', e.pageY + 10);
+                $('.event-tooltip').css('left', e.pageX + 20);
+            });
         },
         eventMouseout: function(calEvent, jsEvent) {
             $(this).css('z-index', 8);
@@ -55,6 +88,7 @@ $(function(){
         eventClick: function(calEvent, jsEvent, view) {
             // Set currentEvent variable according to the event clicked in the calendar
             currentEvent = calEvent;
+
             // Open modal to edit or delete event
             modal({
                 // Available buttons when editing
@@ -74,7 +108,9 @@ $(function(){
                 event: calEvent
             });
         }
+
     });
+
     // Prepares the modal window according to data passed
     function modal(data) {
         // Set modal title
@@ -102,10 +138,11 @@ $(function(){
         //Show Modal
         $('.modal').modal('show');
     }
+
     // Handle Click on Add Button
     $('.modal').on('click', '#add-event',  function(e){
         if(validator(['title', 'description'])) {
-            $.post('crud/addEvent.php', {
+            $.post(base_url+'calendar/addEvent', {
                 title: $('#title').val(),
                 description: $('#description').val(),
                 color: $('#color').val(),
@@ -116,10 +153,12 @@ $(function(){
             });
         }
     });
+
+
     // Handle click on Update Button
     $('.modal').on('click', '#update-event',  function(e){
         if(validator(['title', 'description'])) {
-            $.post('crud/updateEvent.php', {
+            $.post(base_url+'calendar/updateEvent', {
                 id: currentEvent._id,
                 title: $('#title').val(),
                 description: $('#description').val(),
@@ -131,18 +170,24 @@ $(function(){
             });
         }
     });
+
+
+
     // Handle Click on Delete Button
     $('.modal').on('click', '#delete-event',  function(e){
-        $.get('crud/deleteEvent.php?id=' + currentEvent._id, function(result){
+        $.get(base_url+'calendar/deleteEvent?id=' + currentEvent._id, function(result){
             $('.modal').modal('hide');
             $('#calendar').fullCalendar("refetchEvents");
         });
     });
+
+
     // Get Formated Time From Timepicker
     function getTime() {
         var time = $('#time').val();
         return (time.indexOf(':') == 1 ? '0' + time : time) + ':00';
     }
+
     // Dead Basic Validation For Inputs
     function validator(elements) {
         var errors = 0;

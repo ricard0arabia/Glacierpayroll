@@ -1,99 +1,71 @@
-        <div class="row">
-                <div class="col-lg-12">
-                    <h1 class="page-header">Dashboard</h1>
+
+            <div class="row" style = "margin-left: -60px; margin-right: -60px; margin-top: -90px;">
+
+                <div class="col s7">
+
+                    <div class="box-body">
+                        asdasd
+                     </div>
+
+
                 </div>
-                <!-- /.col-lg-12 -->
-            </div>
-            <!-- /.row -->
-            <div class="row">
-                <div class="col-lg-3 col-md-6">
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">
-                            <div class="row">
-                                <div class="col-xs-3">
-                                    <i class="fa fa-comments fa-5x"></i>
+               <div class="col s5">
+                    <div class = "row clearfix">
+                      <div class="card white">
+                        <div id='calendar'></div>
+                        </div>
+                     </div>
+    
+                </div>
+
+
+
+
+
+
+                    <div class="modal fade">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                    <h4 class="modal-title"></h4>
                                 </div>
-                                <div class="col-xs-9 text-right">
-                                    <div class="huge">&nbsp;</div>
-                                    <div> Contributions</div>
+                                <div class="modal-body">
+                                    <div class="error"></div>
+                                    <form class="form-horizontal" id="crud-form">
+                                        <div class="form-group">
+                                            <label class="col-md-4 control-label" for="title">Title</label>
+                                            <div class="col-md-4">
+                                                <input id="title" name="title" type="text" class="form-control input-md" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-4 control-label" for="time">Time</label>
+                                            <div class="col-md-4 input-append bootstrap-timepicker">
+                                                <input id="time" name="time" type="text" class="form-control input-md" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-4 control-label" for="description">Description</label>
+                                            <div class="col-md-4">
+                                                <textarea class="form-control" id="description" name="description"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-4 control-label" for="color">Color</label>
+                                            <div class="col-md-4">
+                                                <input id="color" name="color" type="text" class="form-control input-md" readonly="readonly" />
+                                                <span class="help-block">Click to pick a color</span>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                                 </div>
                             </div>
                         </div>
-                        <a href="<?php echo site_url(); ?>mandatory">
-                            <div class="panel-footer">
-                                <span class="pull-left">View Details</span>
-                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                <div class="clearfix"></div>
-                            </div>
-                        </a>
                     </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="panel panel-green">
-                        <div class="panel-heading">
-                            <div class="row">
-                                <div class="col-xs-3">
-                                    <i class="fa fa-tasks fa-5x"></i>
-                                </div>
-                                <div class="col-xs-9 text-right">
-                                    <div class="huge">&nbsp;</div>
-                                    <div>View Overtime</div>
-                                </div>
-                            </div>
-                        </div>
-                        <a href="<?php echo site_url(); ?>overtime">
-                            <div class="panel-footer">
-                                <span class="pull-left">View Details</span>
-                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                <div class="clearfix"></div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="panel panel-yellow">
-                        <div class="panel-heading">
-                            <div class="row">
-                                <div class="col-xs-3">
-                                    <i class="fa fa-shopping-cart fa-5x"></i>
-                                </div>
-                                <div class="col-xs-9 text-right">
-                                    <div class="huge">&nbsp;</div>
-                                    <div>View Pay Slip</div>
-                                </div>
-                            </div>
-                        </div>
-                        <a href="<?php echo site_url(); ?>payslip">
-                            <div class="panel-footer">
-                                <span class="pull-left">View Details</span>
-                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                <div class="clearfix"></div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="panel panel-red">
-                        <div class="panel-heading">
-                            <div class="row">
-                                <div class="col-xs-3">
-                                    <i class="fa fa-support fa-5x"></i>
-                                </div>
-                                <div class="col-xs-9 text-right">
-                                    <div class="huge">&nbsp;</div>
-                                    <div>User Settings</div>
-                                </div>
-                            </div>
-                        </div>
-                        <a href="<?php echo site_url(); ?>settings">
-                            <div class="panel-footer">
-                                <span class="pull-left">View Details</span>
-                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                <div class="clearfix"></div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
             </div>
             <!-- /.row -->
         
