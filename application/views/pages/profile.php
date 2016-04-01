@@ -11,18 +11,30 @@ img{
 </style>
  <div class="row" style = "margin-left: -60px; margin-right: -60px; margin-top: -90px;">
        <div id="profile-page-sidebar" class="col s12 m4">
+        <?php if(!empty($notif)) { ?>
+                <div class="panel-body">
+                    <div class="alert alert-danger alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <?php echo $notif; ?>    
+                    </div> 
+                </div>
+                <?php } ?>
+
          <div class="card white">
             <div class="card-content white-text">
-             
-        
-                  <img src="https://s-media-cache-ak0.pinimg.com/originals/3b/f0/77/3bf0775b0d234545d14a5941be966ab2.jpg" alt="" class="circle responsive-img"> <!-- notice the "circle" class -->
            
+               <img id="preview" src="<?=base_url(). 'uploads/'.$image[0]['img_name'].$image[0]['ext'];?>">
+                
+     
+                
             </div>
              <div class="card-action">
-              <a href="#">This is a link</a>
-              <a href="#">This is a link</a>
+                 <?php echo form_open_multipart('employees/edit/'.$this->uri->segment(3));?>
+               <input class="pull-left"type="file" id="input" name="userfile" size="20" />
+               <input class="waves-effect waves-light btn"type="submit" value="upload" name="upload" />
+                </form>
             </div>
-        
+       
           </div>
 
 
@@ -328,3 +340,23 @@ img{
            
            
             </div>
+
+    <script>
+      (
+          function() {
+
+          var URL = window.URL || window.webkitURL;
+
+          var input = document.querySelector('#input');
+          var preview = document.querySelector('#preview');
+          
+          // When the file input changes, create a object URL around the file.
+          input.addEventListener('change', function () {
+              preview.src = URL.createObjectURL(this.files[0]);
+          });
+          
+          // When the image loads, release object URL
+         
+      })
+      ();
+ </script>

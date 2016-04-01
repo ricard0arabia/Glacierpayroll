@@ -11,8 +11,24 @@ class Contents extends CI_Model {
 		$this->db = $this->load->database();
 	}
 
-	function add_image($data) {
-		$this->db->insert('uploads',$data);
+	function add_image($data,$id) {
+		$this->db->where('user_id', $id);
+		$this->db->update('employee_details', $data); 
+	}
+
+	function get_image() {
+
+			$getimage = $this->db->query("SELECT img_name, ext
+										FROM employee_details
+										WHERE user_id  = '".$this->uri->segment(3)."'
+										");
+										
+		if($getimage->num_rows() > 0) {
+			return $getimage->result_array();
+		} else {
+			return false;		
+		}
+
 	}
 	
 	#this will get the user to login

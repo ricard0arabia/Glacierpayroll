@@ -66,13 +66,14 @@
                     <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                         <thead>
                             <tr>
-                            	<th>ID</th>
-                                <th>Name</th>
-                                <th>Department</th>
-                                <th>Position</th>
-                                <th>Gender</th>
-                                <th>Contact Number</th>
-                                <th>Action</th>
+                                <th class="center">Image</th>
+                            	<th class="center">ID</th>
+                                <th class="center">Name</th>
+                                <th class="center">Department</th>
+                                <th class="center">Position</th>
+                                <th class="center">Gender</th>
+                                <th class="center">Contact Number</th>
+                                <th class="center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -89,12 +90,13 @@
 								}					
 								$j++; ?>
                             <tr class="<?php echo $style; ?> gradeX">
+                                <td><img height="60" width="60" src="<?=base_url().'uploads/'.$_emp['thumb_name'].$_emp['ext'];?>"></td>
                             	<td class="center"><?php echo $_emp['employeeid']; ?></td>
-                                <td><?php echo $_emp['firstname'].$_emp['lastname'] ; ?></td>
-                               	<td><?php echo $_emp['department']; ?></td>
-                                <td><?php echo $_emp['jobtitle']; ?></td>
-                                <td><?php echo $_emp['gender'];  ?></td>
-                                <td><?php echo $_emp['contact_no'];  ?></td>
+                                <td class="center"><?php echo $_emp['firstname'].$_emp['lastname'] ; ?></td>
+                               	<td class="center"><?php echo $_emp['department']; ?></td>
+                                <td class="center"><?php echo $_emp['jobtitle']; ?></td>
+                                <td class="center"><?php echo $_emp['gender'];  ?></td>
+                                <td class="center"><?php echo $_emp['contact_no'];  ?></td>
                                 <td class="center"><a class="waves-effect waves-light btn" href="<?php echo site_url()."employees/edit/".$_emp['user_id']; ?>">Edit</a> | <a class="waves-effect waves-light btn" href="<?php echo site_url()."employees/delete/".$_emp['user_id']; ?>" onClick="return confirm('Are you sure you want to remove this employee <?php echo $_emp['employeeid']; ?>')">Delete</a></td>
                             </tr>
                             <?php }} ?>

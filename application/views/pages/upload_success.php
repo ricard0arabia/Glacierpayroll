@@ -1,4 +1,3 @@
-
 <html>
 <head>
 <title>Upload Form</title>
@@ -9,7 +8,7 @@
  
 <p>The uploaded Image:</p>
  
-<img alt="uploaded image" src="<?=base_url(). 'uploads/' . $upload_data['raw_name'].$upload_data['file_ext'];?>">
+<img alt="uploaded image" src="<?=base_url(). 'uploads/3.jpg';?>">
  
 <p>The Thumbnail Image:</p>
  

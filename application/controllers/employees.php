@@ -2,6 +2,7 @@
 class Employees extends CI_Controller {
 	var $pgToLoad;
 	
+	
 	public function __construct() {
 		parent::__construct();
 		#this will start the session
@@ -26,7 +27,8 @@ class Employees extends CI_Controller {
 		} while ($continue);		
 	}
 
-	public function index() {		
+	public function index() {	
+
 		$this->main();
 	}	
 	
@@ -34,6 +36,7 @@ class Employees extends CI_Controller {
 		#set default content to load 
 		$this->pgToLoad = empty($this->pgToLoad) ? "employees" : $this->pgToLoad;
 		$disMsg = "";
+		
 		
 		#this will delete the record selected
 		if($this->uri->segment(2) == 'delete') { 
@@ -50,6 +53,11 @@ class Employees extends CI_Controller {
 			$this->updateinfo();	
 		}			
 		
+		if($this->input->post('upload')){
+
+			$this->uploadinfo();
+			$this->do_upload();
+		}
 		if($this->uri->segment(2) == 'add') {
 			#this display the form for products
 			$this->displayForm();
@@ -64,16 +72,11 @@ class Employees extends CI_Controller {
 		}
 
 
-
 		if($this->uri->segment(2) == 'print') {
 			#this display the form for products
 			$this->pdf();
 		} 
 
-	if($this->uri->segment(2) == 'do_upload') {
-			#this display the form for products
-			$this->do_upload();
-		} 
 		
 		#this will logout the user and redirect to the page
 		if($this->uri->segment(2) == 'logout') {
@@ -85,71 +88,83 @@ class Employees extends CI_Controller {
 						'disMsg'	=> $disMsg,												
 						'mainCont'	=> $this->mainCont );
 		
-		$this->load->view('mainTpl', $data, FALSE);
+		$this->load->view('mainTpl', $data, FALSE, array('error' => ' ' ));
 	}
 
 
-	function do_upload(){
 
-		if($this->input->post('upload')){
 
-			$config['upload_path'] = './uploads/';
-			$config['allowed_types'] = 'gif|jpg|png';
-			$config['max_size']    = '1024';
-			$config['max_width']  = '1024';
-			$config['max_height']  = '768';
-			$this->load->library('upload', $config);
+	
+		function do_upload(){
+			if($this->input->post('upload')){
 
-			if ( ! $this->upload->do_upload()){
+				$config['upload_path'] = './uploads/';
+				$config['overwrite'] = TRUE;
+				$config['allowed_types'] = 'gif|jpg|png';
+				$config['max_size']    = '2048';
+				$config['max_width']  = '3000';
+				$config['max_height']  = '1000';
+				$this->load->library('upload', $config);
 
-			$error = array('error' => $this->upload->display_errors());
-			$this->load->view('pages/employeesform', $error);
+				if ( ! $this->upload->do_upload()){
+
+					$error = array('error' => $this->upload->display_errors());
+					$data['notif'] = $this->uploadinfo();
+					$data['level'] = $this->Contents->exeGetUserLevel();
+					$data['image'] = $this->Contents->get_image();
+					$data['status'] = $this->Contents->exeGetUserStatus();
+					$data['emp'] = $this->Contents->exeGetEmpToEdit($this->uri->segment(3));
+					$data['info'] = $this->Contents->exeGetUserInfo($this->uri->segment(3));	
+					$this->mainCont = $this->load->view('pages/profile', $data, TRUE);	
+					
+				}else{
+					$data=$this->upload->data();
+					$this->thumb($data);
+					$file=array(
+					'img_name'=>$data['raw_name'],
+					'thumb_name'=>$data['raw_name'].'_thumb',
+					'ext'=>$data['file_ext'],
+					'upload_date'=>time()
+					);
+					$this->Contents->add_image($file,$this->uri->segment(3));
+					$data = array('upload_data' => $this->upload->data());
+
+					$data['notif'] = $this->uploadinfo();
+					$data['level'] = $this->Contents->exeGetUserLevel();
+					$data['image'] = $this->Contents->get_image();
+					$data['status'] = $this->Contents->exeGetUserStatus();
+					$data['emp'] = $this->Contents->exeGetEmpToEdit($this->uri->segment(3));
+					$data['info'] = $this->Contents->exeGetUserInfo($this->uri->segment(3));	
+			$this->mainCont = $this->load->view('pages/profile', $data, TRUE);		
+				}
+			
 			}
-
 			else{
 
-			$data=$this->upload->data();
-			$this->thumb($data);
-			$file=array(
-			'img_name'=>$data['raw_name'],
-			'thumb_name'=>$data['raw_name'].'_thumb',
-			'ext'=>$data['file_ext'],
-			'upload_date'=>time()
-			);
-			$this->Contents->add_image($file);
-			$data = array('upload_data' => $this->upload->data());
-			$this->load->view('pages/upload_success', $data);
+				redirect(site_url('employees'));
+				}
 			}
-		}
-
-		else{
-
-		redirect(site_url('employees'));
-
-		}
-
-	}
 
 	function thumb($data){
-
-		$config['image_library'] = 'gd2';
-		$config['source_image'] =$data['full_path'];
-		$config['create_thumb'] = TRUE;
-		$config['maintain_ratio'] = TRUE;
-		$config['width'] = 275;
-		$config['height'] = 250;
-		$this->load->library('image_lib', $config);
-		$this->image_lib->resize();
-
-	}
+				$config['image_library'] = 'gd2';
+				$config['source_image'] =$data['full_path'];
+				$config['create_thumb'] = TRUE;
+				$config['maintain_ratio'] = TRUE;
+				$config['width'] = 275;
+				$config['height'] = 250;
+				$this->load->library('image_lib', $config);
+				$this->image_lib->resize();
+				}
+		
 
 	
 	public function getAllEmployees() {
-
+	
 		$data['emp'] = $this->Contents->exeGetEmployeeList();
 		$data['employee'] = $this->Contents->exeGetEmpToEdit($_SESSION['userId']);
 		$data['dept'] = $this->Contents->exeGetEmpDept();
 		$this->mainCont = $this->load->view('pages/employees', $data, TRUE);
+		
 	}
 
 
@@ -169,7 +184,9 @@ class Employees extends CI_Controller {
 
 	public function profile(){
 		if($this->uri->segment(2) == 'edit')
+			
 			$data['level'] = $this->Contents->exeGetUserLevel();
+			$data['image'] = $this->Contents->get_image();
 			$data['status'] = $this->Contents->exeGetUserStatus();
 			$data['emp'] = $this->Contents->exeGetEmpToEdit($this->uri->segment(3));
 			$data['info'] = $this->Contents->exeGetUserInfo($this->uri->segment(3));	
@@ -239,6 +256,19 @@ class Employees extends CI_Controller {
 			$disMsg = "Unable to delete the employee record.";
 		}			
 		$this->mainCont = $this->load->view('pages/employees', $data, TRUE);		 	
+	}
+
+	public function uploadinfo(){
+		
+		if (empty($_FILES['userfile']['name'])) {
+			$notif = "please select an image";
+			return $notif;
+			}	
+		else{
+
+			$notif = "image upload successful";
+			return $notif;
+		}
 	}
 	
 	public function _remap () {
